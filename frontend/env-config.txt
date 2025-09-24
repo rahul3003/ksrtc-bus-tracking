@@ -1,0 +1,11 @@
+# Frontend Environment Configuration
+# Copy this content to a file named .env in the frontend directory
+
+# API Configuration
+VITE_API_URL=http://localhost:5000/api
+
+# Socket.IO Configuration
+VITE_SOCKET_URL=http://localhost:5000
+
+# Google Maps API Key (REQUIRED)
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
