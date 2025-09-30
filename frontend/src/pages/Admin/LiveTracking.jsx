@@ -62,15 +62,11 @@ const LiveTracking = () => {
 
   const loadRouteWaypoints = async () => {
     try {
-      // For demo purposes, we'll use predefined waypoints
+      // Real Karnataka route waypoints for demo
       const waypoints = [
-        { name: "City Center", latitude: 12.9716, longitude: 77.5946, stopTime: 0 },
-        { name: "Mall Road", latitude: 12.9750, longitude: 77.6000, stopTime: 30000 },
-        { name: "Airport Terminal", latitude: 12.9780, longitude: 77.6050, stopTime: 30000 },
-        { name: "Railway Station", latitude: 12.9810, longitude: 77.6100, stopTime: 30000 },
-        { name: "University", latitude: 12.9840, longitude: 77.6150, stopTime: 30000 },
-        { name: "Hospital", latitude: 12.9870, longitude: 77.6200, stopTime: 30000 },
-        { name: "Final Stop", latitude: 12.9900, longitude: 77.6250, stopTime: 0 }
+        { name: "Bangalore City Bus Stand (Majestic)", latitude: 12.9774, longitude: 77.5703, stopTime: 0, type: 'start' },
+        { name: "Electronic City", latitude: 12.8456, longitude: 77.6603, stopTime: 30000, type: 'intermediate' },
+        { name: "Mysore City Bus Stand", latitude: 12.2958, longitude: 76.6394, stopTime: 0, type: 'end' }
       ];
       setRouteWaypoints(waypoints);
     } catch (error) {

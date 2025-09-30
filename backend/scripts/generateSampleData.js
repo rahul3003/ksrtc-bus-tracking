@@ -3,57 +3,127 @@ const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
-// Sample data for different cities in India
+// Real Karnataka routes with districts and major locations
 const sampleRoutes = [
   {
-    name: "City Center to Airport",
-    startPoint: "City Center",
-    endPoint: "Kempegowda International Airport",
-    startLatitude: 12.9716,
-    startLongitude: 77.5946,
-    endLatitude: 13.1986,
-    endLongitude: 77.7063,
-    description: "Direct route from city center to airport"
-  },
-  {
-    name: "Railway Station to Mall",
-    startPoint: "Bangalore City Railway Station",
-    endPoint: "Phoenix MarketCity",
-    startLatitude: 12.9767,
-    startLongitude: 77.5753,
-    endLatitude: 12.9958,
-    endLongitude: 77.6591,
-    description: "Route connecting railway station to shopping mall"
-  },
-  {
-    name: "University to Hospital",
-    startPoint: "Indian Institute of Science",
-    endPoint: "Manipal Hospital",
-    startLatitude: 13.0208,
-    startLongitude: 77.5701,
-    endLatitude: 12.9141,
-    startLongitude: 77.5962,
-    description: "Route from university to major hospital"
-  },
-  {
-    name: "IT Park to Residential Area",
-    startPoint: "Electronic City",
-    endPoint: "Koramangala",
-    startLatitude: 12.8456,
-    startLongitude: 77.6603,
-    endLatitude: 12.9279,
-    endLongitude: 77.6271,
-    description: "Route from IT hub to residential area"
-  },
-  {
-    name: "Bus Stand to Temple",
-    startPoint: "Majestic Bus Stand",
-    endPoint: "ISKCON Temple",
+    name: "Bangalore to Mysore",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Mysore City Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Mysore",
     startLatitude: 12.9774,
     startLongitude: 77.5703,
-    endLatitude: 12.8408,
-    endLongitude: 77.6651,
-    description: "Route from main bus stand to temple"
+    endLatitude: 12.2958,
+    endLongitude: 76.6394,
+    description: "Popular intercity route connecting Karnataka's capital to cultural capital"
+  },
+  {
+    name: "Bangalore to Hubli",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Hubli Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Dharwad",
+    startLatitude: 12.9774,
+    startLongitude: 77.5703,
+    endLatitude: 15.3647,
+    endLongitude: 75.1240,
+    description: "Major route connecting South Karnataka to North Karnataka"
+  },
+  {
+    name: "Bangalore to Mangalore",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Mangalore Central Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Dakshina Kannada",
+    startLatitude: 12.9774,
+    startLongitude: 77.5703,
+    endLatitude: 12.9141,
+    endLongitude: 74.8560,
+    description: "Coastal route connecting Bangalore to port city"
+  },
+  {
+    name: "Mysore to Hassan",
+    startPoint: "Mysore City Bus Stand",
+    endPoint: "Hassan Bus Stand",
+    startDistrict: "Mysore",
+    endDistrict: "Hassan",
+    startLatitude: 12.2958,
+    startLongitude: 76.6394,
+    endLatitude: 13.0048,
+    endLongitude: 76.1025,
+    description: "Route through Karnataka's heritage region"
+  },
+  {
+    name: "Hubli to Belgaum",
+    startPoint: "Hubli Bus Stand",
+    endPoint: "Belgaum Bus Stand",
+    startDistrict: "Dharwad",
+    endDistrict: "Belgaum",
+    startLatitude: 15.3647,
+    startLongitude: 75.1240,
+    endLatitude: 15.8497,
+    endLongitude: 74.4977,
+    description: "North Karnataka intercity route"
+  },
+  {
+    name: "Bangalore to Tumkur",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Tumkur Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Tumkur",
+    startLatitude: 12.9774,
+    startLongitude: 77.5703,
+    endLatitude: 13.3409,
+    endLongitude: 77.1022,
+    description: "Short distance route to industrial city"
+  },
+  {
+    name: "Mangalore to Udupi",
+    startPoint: "Mangalore Central Bus Stand",
+    endPoint: "Udupi Bus Stand",
+    startDistrict: "Dakshina Kannada",
+    endDistrict: "Udupi",
+    startLatitude: 12.9141,
+    startLongitude: 74.8560,
+    endLatitude: 13.3409,
+    endLongitude: 74.7421,
+    description: "Coastal route connecting major coastal cities"
+  },
+  {
+    name: "Bangalore to Chitradurga",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Chitradurga Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Chitradurga",
+    startLatitude: 12.9774,
+    startLongitude: 77.5703,
+    endLatitude: 14.2254,
+    endLongitude: 76.3980,
+    description: "Route to historical fort city"
+  },
+  {
+    name: "Bangalore to Davangere",
+    startPoint: "Bangalore City Bus Stand (Majestic)",
+    endPoint: "Davangere Bus Stand",
+    startDistrict: "Bangalore Urban",
+    endDistrict: "Davangere",
+    startLatitude: 12.9774,
+    startLongitude: 77.5703,
+    endLatitude: 14.4644,
+    endLongitude: 75.9218,
+    description: "Route to industrial city of Davangere"
+  },
+  {
+    name: "Hubli to Haveri",
+    startPoint: "Hubli Bus Stand",
+    endPoint: "Haveri Bus Stand",
+    startDistrict: "Dharwad",
+    endDistrict: "Haveri",
+    startLatitude: 15.3647,
+    startLongitude: 75.1240,
+    endLatitude: 14.7936,
+    endLongitude: 75.4044,
+    description: "Short distance route between Hubli and Haveri"
   }
 ];
 
@@ -159,12 +229,22 @@ async function generateSampleData() {
         routeData.startLatitude,
         routeData.startLongitude,
         routeData.endLatitude,
-        routeData.endLongitude
+        routeData.endLongitude,
+        routeData.startDistrict,
+        routeData.endDistrict
       );
 
       const route = await prisma.route.create({
         data: {
-          ...routeData,
+          name: routeData.name,
+          startPoint: routeData.startPoint,
+          endPoint: routeData.endPoint,
+          startDistrict: routeData.startDistrict,
+          endDistrict: routeData.endDistrict,
+          startLatitude: routeData.startLatitude,
+          startLongitude: routeData.startLongitude,
+          endLatitude: routeData.endLatitude,
+          endLongitude: routeData.endLongitude,
           distance: calculateDistance(
             routeData.startLatitude,
             routeData.startLongitude,
@@ -177,6 +257,7 @@ async function generateSampleData() {
             routeData.endLatitude,
             routeData.endLongitude
           ) / 30 * 60), // Assume 30 km/h average speed
+          description: routeData.description,
           waypoints: JSON.stringify(waypoints)
         }
       });
@@ -254,11 +335,20 @@ async function generateSampleData() {
         const waypointIndex = Math.floor((i / numLocations) * waypoints.length);
         const waypoint = waypoints[waypointIndex];
         
+        // Ensure valid coordinates
+        const latitude = waypoint.latitude + (Math.random() - 0.5) * 0.001;
+        const longitude = waypoint.longitude + (Math.random() - 0.5) * 0.001;
+        
+        if (isNaN(latitude) || isNaN(longitude)) {
+          console.log('Invalid waypoint coordinates:', waypoint);
+          continue;
+        }
+        
         const location = await prisma.location.create({
           data: {
             tripId: trip.id,
-            latitude: waypoint.latitude + (Math.random() - 0.5) * 0.001, // Add some randomness
-            longitude: waypoint.longitude + (Math.random() - 0.5) * 0.001,
+            latitude: latitude,
+            longitude: longitude,
             speed: Math.floor(Math.random() * 20) + 20, // 20-40 km/h
             heading: Math.floor(Math.random() * 360),
             timestamp: new Date(Date.now() - (numLocations - i) * 2 * 60 * 1000) // 2 minutes apart
@@ -291,28 +381,175 @@ async function generateSampleData() {
   }
 }
 
-// Helper function to generate waypoints along a route
-function generateWaypoints(startLat, startLng, endLat, endLng) {
+// Helper function to generate waypoints along a route with real Karnataka locations
+function generateWaypoints(startLat, startLng, endLat, endLng, startDistrict, endDistrict) {
   const waypoints = [];
-  const numWaypoints = 5;
   
-  for (let i = 0; i <= numWaypoints; i++) {
-    const ratio = i / numWaypoints;
-    const lat = startLat + (endLat - startLat) * ratio;
-    const lng = startLng + (endLng - startLng) * ratio;
-    
-    // Add some curve to make it look more realistic
-    const curveOffset = Math.sin(ratio * Math.PI) * 0.002;
-    
+  // Define major intermediate locations based on route
+  const intermediateStops = getIntermediateStops(startLat, startLng, endLat, endLng, startDistrict, endDistrict);
+  
+  // Add start point
+  waypoints.push({
+    name: getStartLocationName(startDistrict),
+    district: startDistrict,
+    latitude: startLat,
+    longitude: startLng,
+    stopTime: 0,
+    type: 'start'
+  });
+  
+  // Add intermediate stops
+  intermediateStops.forEach((stop, index) => {
     waypoints.push({
-      name: i === 0 ? 'Start Point' : i === numWaypoints ? 'End Point' : `Stop ${i}`,
-      latitude: lat + curveOffset,
-      longitude: lng,
-      stopTime: i === 0 || i === numWaypoints ? 0 : 30000 // 30 seconds at intermediate stops
+      name: stop.name,
+      district: stop.district,
+      latitude: stop.latitude,
+      longitude: stop.longitude,
+      stopTime: 30000, // 30 seconds at intermediate stops
+      type: 'intermediate'
+    });
+  });
+  
+  // Add end point
+  waypoints.push({
+    name: getEndLocationName(endDistrict),
+    district: endDistrict,
+    latitude: endLat,
+    longitude: endLng,
+    stopTime: 0,
+    type: 'end'
+  });
+  
+  return waypoints;
+}
+
+// Get intermediate stops based on route
+function getIntermediateStops(startLat, startLng, endLat, endLng, startDistrict, endDistrict) {
+  const stops = [];
+  
+  // Major Karnataka cities and towns with coordinates
+  const karnatakaLocations = {
+    'Bangalore Urban': [
+      { name: 'Electronic City', lat: 12.8456, lng: 77.6603 },
+      { name: 'Koramangala', lat: 12.9279, lng: 77.6271 },
+      { name: 'Whitefield', lat: 12.9698, lng: 77.7500 },
+      { name: 'Yelahanka', lat: 13.1007, lng: 77.5963 }
+    ],
+    'Mysore': [
+      { name: 'Srirangapatna', lat: 12.4141, lng: 76.7042 },
+      { name: 'Mandya', lat: 12.5242, lng: 76.8958 },
+      { name: 'Chamundi Hills', lat: 12.2729, lng: 76.6700 }
+    ],
+    'Dharwad': [
+      { name: 'Dharwad City', lat: 15.4589, lng: 75.0078 },
+      { name: 'Gadag', lat: 15.4319, lng: 75.6319 },
+      { name: 'Haveri', lat: 14.7936, lng: 75.4044 }
+    ],
+    'Dakshina Kannada': [
+      { name: 'Bantwal', lat: 12.9025, lng: 75.0336 },
+      { name: 'Puttur', lat: 12.7667, lng: 75.2167 },
+      { name: 'Sullia', lat: 12.5667, lng: 75.3833 }
+    ],
+    'Hassan': [
+      { name: 'Arsikere', lat: 13.3167, lng: 76.2500 },
+      { name: 'Holenarasipura', lat: 12.7833, lng: 76.2500 },
+      { name: 'Sakleshpur', lat: 12.9500, lng: 75.7833 }
+    ],
+    'Belgaum': [
+      { name: 'Gokak', lat: 16.1667, lng: 74.8333 },
+      { name: 'Chikkodi', lat: 16.4167, lng: 74.6000 },
+      { name: 'Athani', lat: 16.7333, lng: 75.0667 }
+    ],
+    'Tumkur': [
+      { name: 'Sira', lat: 13.7500, lng: 76.9000 },
+      { name: 'Tiptur', lat: 13.2500, lng: 76.4833 },
+      { name: 'Madhugiri', lat: 13.6667, lng: 77.2167 }
+    ],
+    'Udupi': [
+      { name: 'Kundapura', lat: 13.6333, lng: 74.6833 },
+      { name: 'Karkala', lat: 13.2000, lng: 74.9833 },
+      { name: 'Kaup', lat: 13.4000, lng: 74.7500 }
+    ],
+    'Chitradurga': [
+      { name: 'Hiriyur', lat: 13.9500, lng: 76.6167 },
+      { name: 'Hosadurga', lat: 13.7833, lng: 76.2833 },
+      { name: 'Molakalmuru', lat: 14.7333, lng: 76.7167 }
+    ],
+    'Davangere': [
+      { name: 'Harihar', lat: 14.5167, lng: 75.8000 },
+      { name: 'Honnali', lat: 14.2333, lng: 75.6500 },
+      { name: 'Channagiri', lat: 14.0167, lng: 75.9333 }
+    ],
+    'Haveri': [
+      { name: 'Ranibennur', lat: 14.6167, lng: 75.6167 },
+      { name: 'Hangal', lat: 14.7667, lng: 75.1333 },
+      { name: 'Byadgi', lat: 14.6833, lng: 75.4833 }
+    ]
+  };
+  
+  // Select 2-3 intermediate stops based on the route
+  const startLocations = karnatakaLocations[startDistrict] || [];
+  const endLocations = karnatakaLocations[endDistrict] || [];
+  
+  // Add stops from start district
+  if (startLocations.length > 0) {
+    const startStop = startLocations[Math.floor(Math.random() * startLocations.length)];
+    stops.push({
+      name: startStop.name,
+      district: startDistrict,
+      latitude: startStop.lat,
+      longitude: startStop.lng
     });
   }
   
-  return waypoints;
+  // Add stops from end district
+  if (endLocations.length > 0) {
+    const endStop = endLocations[Math.floor(Math.random() * endLocations.length)];
+    stops.push({
+      name: endStop.name,
+      district: endDistrict,
+      latitude: endStop.lat,
+      longitude: endStop.lng
+    });
+  }
+  
+  return stops;
+}
+
+// Get start location name based on district
+function getStartLocationName(district) {
+  const locationNames = {
+    'Bangalore Urban': 'Bangalore City Bus Stand (Majestic)',
+    'Mysore': 'Mysore City Bus Stand',
+    'Dharwad': 'Hubli Bus Stand',
+    'Dakshina Kannada': 'Mangalore Central Bus Stand',
+    'Hassan': 'Hassan Bus Stand',
+    'Belgaum': 'Belgaum Bus Stand',
+    'Tumkur': 'Tumkur Bus Stand',
+    'Udupi': 'Udupi Bus Stand',
+    'Chitradurga': 'Chitradurga Bus Stand',
+    'Davangere': 'Davangere Bus Stand',
+    'Haveri': 'Haveri Bus Stand'
+  };
+  return locationNames[district] || `${district} Bus Stand`;
+}
+
+// Get end location name based on district
+function getEndLocationName(district) {
+  const locationNames = {
+    'Bangalore Urban': 'Bangalore City Bus Stand (Majestic)',
+    'Mysore': 'Mysore City Bus Stand',
+    'Dharwad': 'Hubli Bus Stand',
+    'Dakshina Kannada': 'Mangalore Central Bus Stand',
+    'Hassan': 'Hassan Bus Stand',
+    'Belgaum': 'Belgaum Bus Stand',
+    'Tumkur': 'Tumkur Bus Stand',
+    'Udupi': 'Udupi Bus Stand',
+    'Chitradurga': 'Chitradurga Bus Stand',
+    'Davangere': 'Davangere Bus Stand',
+    'Haveri': 'Haveri Bus Stand'
+  };
+  return locationNames[district] || `${district} Bus Stand`;
 }
 
 // Helper function to calculate distance between two points

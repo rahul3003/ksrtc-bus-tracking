@@ -61,6 +61,10 @@ model Route {
   name          String
   startPoint    String
   endPoint      String
+  startDistrict String?  // Karnataka district name
+  endDistrict   String?  // Karnataka district name
+  startTaluk    String?  // Karnataka taluk name
+  endTaluk      String?  // Karnataka taluk name
   startLatitude Float?
   startLongitude Float?
   endLatitude   Float?
@@ -68,7 +72,7 @@ model Route {
   distance      Float?   // in kilometers
   duration      Int?     // in minutes
   description   String?
-  waypoints     String?  @db.Text // JSON string of waypoints
+  waypoints     String?  @db.Text // JSON string of waypoints with district and taluk info
   routePath     String?  @db.Text // JSON string of route path coordinates
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())

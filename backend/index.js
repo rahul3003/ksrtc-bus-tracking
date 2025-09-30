@@ -12,6 +12,7 @@ const tripRoutes = require('./routes/trips');
 const locationRoutes = require('./routes/locations');
 const bookingRoutes = require('./routes/bookings');
 const notificationRoutes = require('./routes/notifications');
+const trackingRoutes = require('./routes/tracking');
 
 const app = express();
 const server = createServer(app);
@@ -36,6 +37,7 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api', trackingRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

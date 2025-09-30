@@ -258,16 +258,20 @@ router.post('/start-route-simulation/:tripId', authenticateToken, async (req, re
       data: { status: 'IN_PROGRESS' }
     });
 
-    // Define route waypoints (bus stops along the route)
-    const routeWaypoints = [
-      { name: "City Center", latitude: 12.9716, longitude: 77.5946, stopTime: 0 },
-      { name: "Mall Road", latitude: 12.9750, longitude: 77.6000, stopTime: 30000 }, // 30 seconds
-      { name: "Airport Terminal", latitude: 12.9780, longitude: 77.6050, stopTime: 30000 },
-      { name: "Railway Station", latitude: 12.9810, longitude: 77.6100, stopTime: 30000 },
-      { name: "University", latitude: 12.9840, longitude: 77.6150, stopTime: 30000 },
-      { name: "Hospital", latitude: 12.9870, longitude: 77.6200, stopTime: 30000 },
-      { name: "Final Stop", latitude: 12.9900, longitude: 77.6250, stopTime: 0 }
-    ];
+    // Get route waypoints from the route data
+    let routeWaypoints = [];
+    if (trip.route.waypoints) {
+      routeWaypoints = JSON.parse(trip.route.waypoints);
+    } else {
+      // Fallback waypoints for Karnataka routes
+      routeWaypoints = [
+        { name: "Start Point", latitude: trip.route.startLatitude || 12.9716, longitude: trip.route.startLongitude || 77.5946, stopTime: 0, type: 'start' },
+        { name: "Intermediate Stop 1", latitude: 12.9750, longitude: 77.6000, stopTime: 30000, type: 'intermediate' },
+        { name: "Intermediate Stop 2", latitude: 12.9780, longitude: 77.6050, stopTime: 30000, type: 'intermediate' },
+        { name: "Intermediate Stop 3", latitude: 12.9810, longitude: 77.6100, stopTime: 30000, type: 'intermediate' },
+        { name: "End Point", latitude: trip.route.endLatitude || 12.9900, longitude: trip.route.endLongitude || 77.6250, stopTime: 0, type: 'end' }
+      ];
+    }
 
     // Store route waypoints in trip data (we'll use a simple approach)
     await prisma.trip.update({
@@ -312,20 +316,18 @@ router.get('/route-waypoints/:tripId', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Trip not found' });
     }
 
-    // Use route waypoints if available, otherwise use default
+    // Use route waypoints if available, otherwise use default Karnataka waypoints
     let routeWaypoints = [];
     if (trip.route.waypoints) {
       routeWaypoints = JSON.parse(trip.route.waypoints);
     } else {
-      // Default waypoints
+      // Default Karnataka waypoints
       routeWaypoints = [
-        { name: "City Center", latitude: 12.9716, longitude: 77.5946, stopTime: 0 },
-        { name: "Mall Road", latitude: 12.9750, longitude: 77.6000, stopTime: 30000 },
-        { name: "Airport Terminal", latitude: 12.9780, longitude: 77.6050, stopTime: 30000 },
-        { name: "Railway Station", latitude: 12.9810, longitude: 77.6100, stopTime: 30000 },
-        { name: "University", latitude: 12.9840, longitude: 77.6150, stopTime: 30000 },
-        { name: "Hospital", latitude: 12.9870, longitude: 77.6200, stopTime: 30000 },
-        { name: "Final Stop", latitude: 12.9900, longitude: 77.6250, stopTime: 0 }
+        { name: trip.route.startPoint || "Start Point", latitude: trip.route.startLatitude || 12.9716, longitude: trip.route.startLongitude || 77.5946, stopTime: 0, type: 'start' },
+        { name: "Intermediate Stop 1", latitude: 12.9750, longitude: 77.6000, stopTime: 30000, type: 'intermediate' },
+        { name: "Intermediate Stop 2", latitude: 12.9780, longitude: 77.6050, stopTime: 30000, type: 'intermediate' },
+        { name: "Intermediate Stop 3", latitude: 12.9810, longitude: 77.6100, stopTime: 30000, type: 'intermediate' },
+        { name: trip.route.endPoint || "End Point", latitude: trip.route.endLatitude || 12.9900, longitude: trip.route.endLongitude || 77.6250, stopTime: 0, type: 'end' }
       ];
     }
 
